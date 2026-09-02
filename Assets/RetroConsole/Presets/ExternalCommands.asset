@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ecac3d1d318ec34da11636a47aa6454, type: 3}
+  m_Name: ExternalCommands
+  m_EditorClassIdentifier: 
+  commands:
+  - command: test
+    execuble: {fileID: 5682443052745031693, guid: 3764c279839214b439f44e33d718f8e3, type: 3}
+    description: Demo command, do nothing, only for tests and demonstartions
+  - command: echo
+    execuble: {fileID: 891779665913349927, guid: 02d8cce69e15c494d830577a96ade9fe, type: 3}
+    description: Writes input text to standard output
+  - command: cat
+    execuble: {fileID: 4667746862721337296, guid: 0999f39ddab434f479241a066692bec1, type: 3}
+    description: Writes the content of a file to standard output
+  - command: rm
+    execuble: {fileID: 8560825645775821384, guid: 00726e4953cd1f14283c58e85ebd6b2f, type: 3}
+    description: Utility used to permanently remove (delete) files and directories
