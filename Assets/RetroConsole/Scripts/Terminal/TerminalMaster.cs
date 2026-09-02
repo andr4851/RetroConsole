@@ -45,10 +45,17 @@ namespace RetroConsole.Console
         #region IOrder overides
         public void Init()
         {
-            string[] _history = System.IO.File.ReadAllLines(historyrcPath);
-
-            foreach (string line in _history)
-                history.Add(line);
+            string[] _history = null;
+            try
+            {
+                _history = System.IO.File.ReadAllLines(historyrcPath);
+                foreach (string line in _history)
+                    history.Add(line);
+            }
+            catch
+            {
+                Debug.Log("At first startup there is can be troubles with gettin history from data file. Ignore it, it will be fix in the next startup");
+            }
 
             _buffer = GetComponentInChildren<TerminalBuffer>();
             _buffer.SetOrder(this);
