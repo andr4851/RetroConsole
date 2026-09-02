@@ -73,3 +73,12 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+/Assets/RConsole
+Assets/RConsole/conf.meta
+Assets/RConsole/conf/shellrc.rdk
+Assets/RConsole/conf/shellrc.rdk.meta
+Assets/RConsole/log.meta
+Assets/RConsole/log/bufferrc.rdk
+Assets/RConsole/log/bufferrc.rdk.meta
+Assets/RConsole/log/historyrc.rdk
+Assets/RConsole/log/historyrc.rdk.meta
