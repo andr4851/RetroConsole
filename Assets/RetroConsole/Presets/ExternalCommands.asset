@@ -28,3 +28,6 @@ MonoBehaviour:
   - command: mk
     execuble: {fileID: 2039877439979892270, guid: 8ac74b4f5d14e8a42bf42c6d41a4a414, type: 3}
     description: Utility used to create files and directories
+  - command: log
+    execuble: {fileID: 1174982911428625378, guid: c35ec35d98d736044919fd95cd906d04, type: 3}
+    description: Utility used for unity log monitoring

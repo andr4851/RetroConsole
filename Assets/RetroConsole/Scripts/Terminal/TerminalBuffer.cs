@@ -2,7 +2,6 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
 using static RetroConsole.Utility.ConstantsLibrary;
 
 namespace RetroConsole.Extented
