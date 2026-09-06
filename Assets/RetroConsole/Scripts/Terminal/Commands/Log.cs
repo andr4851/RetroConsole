@@ -1,5 +1,6 @@
 using UnityEngine;
 using RetroConsole.Extented;
+using Codice.Client.BaseCommands;
 
 namespace RetroConsole.Console.Commands
 {
@@ -7,11 +8,11 @@ namespace RetroConsole.Console.Commands
     public class Log: TerminalCommand, IOrder
     {
         #region Variables
-        [SerializeField]
         private GameObject currentTerminal;
 
-        [SerializeField]
         private bool inWork = false;
+
+        private bool showLog, showWarn, showError, showAssert, showException, showStack; 
 
         #endregion
 
@@ -24,6 +25,36 @@ namespace RetroConsole.Console.Commands
         #region API
         public override void Init()
         {
+            if (separatedinput.Length <= 1)
+                SetThemAllTrue();
+            else 
+                SetThemAllFalse();
+
+            for (int i = 1; i < separatedinput.Length; i++)
+            {
+                switch (separatedinput[i])
+                {
+                    case "-l":
+                        showLog = true;
+                        break;
+                    case "-w":
+                        showWarn = true;
+                        break;
+                    case "-e":
+                        showError = true;
+                        break;
+                    case "-a":
+                        showAssert = true;
+                        break;
+                    case "-x":
+                        showException = true;
+                        break;
+                    case "-s":
+                        showStack = true;
+                        break;
+                }
+            }
+
             if (inWork != false || currentTerminal == null)
             {
                 buffer.SetFormat(string.Empty);
@@ -69,19 +100,39 @@ namespace RetroConsole.Console.Commands
             switch (_logType)
             {
                 case LogType.Error:
-                    buffer.PrintLine($"<color=red>[ERROR]{_messege} in {_stack}</color>");
+                    if (showError)
+                        if (showStack)
+                            buffer.PrintLine($"<color=red>[ERROR]{_messege} in {_stack}</color>");
+                        else
+                            buffer.PrintLine($"<color=red>[ERROR]{_messege}</color>");
                     break;
                 case LogType.Warning:
-                    buffer.PrintLine($"<color=yellow>[WARNING]{_messege} in {_stack}</color>");
+                    if (showWarn)
+                        if (showStack)
+                            buffer.PrintLine($"<color=yellow>[WARNING]{_messege} in {_stack}</color>");
+                        else
+                            buffer.PrintLine($"<color=yellow>[WARNING]{_messege}</color>");
                     break;
                 case LogType.Log:
-                    buffer.PrintLine($"<color=green>[LOG]{_messege} in {_stack}</color>");
+                    if (showLog)
+                        if (showStack)
+                            buffer.PrintLine($"<color=green>[LOG]{_messege} in {_stack}</color>");
+                        else
+                            buffer.PrintLine($"<color=green>[LOG]{_messege}</color>");
                     break;
                 case LogType.Assert:
-                    buffer.PrintLine($"<color=red>[ASSERT]{_messege} in {_stack}</color>");
+                    if (showAssert)
+                        if (showStack)
+                            buffer.PrintLine($"<color=red>[ASSERT]{_messege} in {_stack}</color>");
+                        else
+                            buffer.PrintLine($"<color=red>[ASSERT]{_messege}</color>");
                     break;
                 case LogType.Exception:
-                    buffer.PrintLine($"<color=red>[EXCEPTION]{_messege} in {_stack}</color>");
+                    if (showException)
+                        if(showStack)
+                            buffer.PrintLine($"<color=red>[EXCEPTION]{_messege} in {_stack}</color>");
+                        else
+                            buffer.PrintLine($"<color=red>[EXCEPTION]{_messege}</color>");
                     break;
             }
 
@@ -94,6 +145,26 @@ namespace RetroConsole.Console.Commands
 
             input = string.Empty;
             separatedinput = null;
+        }
+
+        private void SetThemAllTrue()
+        {
+            showLog = true;
+            showError = true;
+            showWarn = true;
+            showException = true;
+            showAssert = true;
+            showStack = true;
+        }
+
+        private void SetThemAllFalse()
+        {
+            showLog = false;
+            showError = false;
+            showWarn = false;
+            showException = false;
+            showAssert = false;
+            showStack = false;
         }
 
         #endregion
