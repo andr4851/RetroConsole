@@ -110,13 +110,16 @@ namespace RetroConsole.Console
                 _buffer.OnEnd();
         }
 
-        public void UserInit()
-        {
-            historyrcPath = $"{logPath}{rsFiles[0]}";
-            history = System.IO.File.ReadAllLines(historyrcPath).ToList();
+        public void OnCtrlC() =>
+            _buffer.InsertInput($"[^C]");
 
-            currentHistoryCommandIndex = history.Count;
-        }
+        //public void UserInit()
+        //{
+        //    historyrcPath = $"{logPath}{rsFiles[0]}";
+        //    history = System.IO.File.ReadAllLines(historyrcPath).ToList();
+
+        //    currentHistoryCommandIndex = history.Count;
+        //}
 
         #endregion
 

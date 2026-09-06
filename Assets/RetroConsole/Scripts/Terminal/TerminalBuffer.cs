@@ -51,6 +51,12 @@ namespace RetroConsole.Extented
 
             if (Input.GetKeyDown(KeyCode.End))
                 OnEnd();
+
+            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.C))
+            {
+                order.OnCtrlC();
+                BufferReload();
+            }
         }
 
         private void OnApplicationQuit() =>
@@ -210,7 +216,6 @@ namespace RetroConsole.Extented
                 text += $"\n{lineFormat}:";
             else
                 text += $"{lineFormat}:";
-
         }
 
         private void OnInput(string s)
@@ -270,6 +275,27 @@ namespace RetroConsole.Extented
             }
 
             rect.verticalNormalizedPosition = 0;
+        }
+
+        private void BufferReload()
+        {
+            inputBuffer = string.Empty;
+            if (makeNewLine)
+                NewLine(format);
+            else
+            {
+                NewLine(format, false);
+                makeNewLine = true;
+            }
+            buffer = text;
+
+            counter = 0;
+
+            if (!block)
+            {
+                OnEnd();
+                ActivateInputField();
+            }
         }
 
         private void SetInputBuffer() =>

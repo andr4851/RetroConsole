@@ -1,9 +1,9 @@
 using UnityEngine;
 using RetroConsole.Extented;
-using System.Collections;
 
 namespace RetroConsole.Console.Commands
 {
+    [AddComponentMenu("RetroConsole/Terminal/Log")]
     public class Log: TerminalCommand, IOrder
     {
         #region Variables
@@ -16,12 +16,8 @@ namespace RetroConsole.Console.Commands
         #endregion
 
         #region Unity functions
-        private void OnApplicationQuit()
-        {
-            inWork = false;
-
-            currentTerminal = null;
-        }
+        private void OnApplicationQuit() =>
+            ResetVars();
 
         #endregion
 
@@ -46,16 +42,23 @@ namespace RetroConsole.Console.Commands
 
         public override void OnInputEnter(string input)
         {
-            
+            //This void is plug
         }
 
         public override void OnExit()
         {
+            buffer.PrintLine("The logger was Interrupted!");
             Application.logMessageReceived -= Getter;
 
             buffer.SetOrder(master);
 
             buffer.SetFormat($"unity@{Application.productName}");
+        }
+
+        public override void OnCtrlC()
+        {
+            ResetVars();
+            OnExit();
         }
 
         #endregion

@@ -7,5 +7,6 @@ namespace RetroConsole.Extented
         public abstract void OnExit();
         public abstract void OnArrowUp();
         public abstract void OnArrowDown();
+        public abstract void OnCtrlC();
     }
 }

@@ -37,11 +37,17 @@ namespace RetroConsole.Console
 
             buffer.SetFormat($"unity@{Application.productName}");
         }
-        public void OnArrowUp() =>
+        public virtual void OnArrowUp() =>
             buffer.InsertInput("Arrow up");
 
-        public void OnArrowDown() =>
+        public virtual void OnArrowDown() =>
             buffer.InsertInput("Arrow down");
+
+        public virtual void OnCtrlC()
+        {
+            buffer.PrintLine("You've Interrupted the current command!");
+            OnExit();
+        }
 
         #endregion
 
