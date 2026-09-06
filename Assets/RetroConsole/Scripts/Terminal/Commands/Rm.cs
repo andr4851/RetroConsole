@@ -9,6 +9,7 @@ using RetroConsole.Utility;
 
 namespace RetroConsole.Console.Commands
 {
+    [AddComponentMenu("RetroConsole/Terminal/Rm")]
     public class Rm: TerminalCommand, IOrder
     {
         #region Variables
@@ -52,6 +53,11 @@ namespace RetroConsole.Console.Commands
                         force = true;
                         recursive = true;
                         break;
+                    case "-h":
+                        buffer.PrintLine("Use that syntaxis for remove the file:\nrm <color=green>[path]</color> <color=purple>[argiments]</color>");
+                        buffer.PrintLine($"Arguments list:\n<color=yellow>-r</color> - recursive removing\n<color=yellow>-f</color> - force\n<color=yellow>-rf</color> - recursive removing and force\n<color=yellow>-v</color> - verbose");
+                        OnExit();
+                        return;
                 }
             }
 
@@ -153,9 +159,9 @@ namespace RetroConsole.Console.Commands
         #region Internal functions
         private string GetPath()
         {
-            List<string> _path = new List<string>();
+            List<string> _path = new();
 
-            List<string> tokens = new List<string>();
+            List<string> tokens = new();
             foreach (Match m in Tokenizator.TokenRx.Matches(input))
                 tokens.Add(Tokenizator.Unescape(m.Groups["val"].Value));
 
@@ -175,7 +181,7 @@ namespace RetroConsole.Console.Commands
 
         private void GetCatalogAndFiles()
         {
-            DirectoryInfo pathInfo = new DirectoryInfo(path);
+            DirectoryInfo pathInfo = new(path);
 
             fileInfos = pathInfo.GetFiles("*", SearchOption.AllDirectories);
             directoryInfos = pathInfo.GetDirectories("*", SearchOption.AllDirectories);

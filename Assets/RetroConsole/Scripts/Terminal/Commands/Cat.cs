@@ -9,6 +9,7 @@ using RetroConsole.Extented;
 
 namespace RetroConsole.Console.Commands
 {
+    [AddComponentMenu("RetroConsole/Terminal/Cat")]
     public class Cat : TerminalCommand, IOrder
     {
         #region Variables
@@ -23,6 +24,28 @@ namespace RetroConsole.Console.Commands
         #region API
         public override void Init()
         {
+            for (int i = 1; i < separatedinput.Length; i++)
+            {
+                switch (separatedinput[i])
+                {
+                    case "-n":
+                        if (numerateWithoutEmpty != true)
+                            numerate = true;
+                        break;
+                    case "-b":
+                        numerateWithoutEmpty = true;
+
+                        if (numerate != false)
+                            numerate = false;
+                        break;
+                    case "-h":
+                        buffer.PrintLine("Use that syntaxis for read a file:\ncat <color=green>[path]</color> <color=purple>[argiments (-n or -b)]</color>");
+                        buffer.PrintLine($"Arguments list:\n<color=yellow>-n</color> - numerate lines\n<color=yellow>-b</color> - numerate lines and ignore empty");
+                        OnExit();
+                        return;
+                }
+            }
+
             path = GetPath();
 
             if (path == string.Empty)
@@ -43,25 +66,6 @@ namespace RetroConsole.Console.Commands
                 buffer.PrintLine("<color=red>Invalid path! File not found</color>");
                 OnExit();
                 return;
-            }
-
-            for (int i = 1; i < separatedinput.Length; i++)
-            {
-                switch (separatedinput[i])
-                {
-                    case "-n":
-                        if (numerateWithoutEmpty != true)
-                            numerate = true;
-
-                        break;
-                    case "-b":
-                        numerateWithoutEmpty = true;
-
-                        if (numerate != false)
-                            numerate = false;
-
-                        break;
-                }
             }
 
             if (!numerate && !numerateWithoutEmpty)

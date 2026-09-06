@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using RetroConsole.Extented;
 using RetroConsole.Windows;
@@ -22,7 +21,7 @@ namespace RetroConsole.Console
 
         private TerminalBuffer _buffer;
 
-        private string historyrcPath = $"{logPath}{rsFiles[0]}";
+        private readonly string historyrcPath = $"{logPath}{rsFiles[0]}";
         private List<string> history = new();
 
         private int currentHistoryCommandIndex;
@@ -45,7 +44,7 @@ namespace RetroConsole.Console
         #region IOrder overides
         public void Init()
         {
-            string[] _history = null;
+            string[] _history;
             try
             {
                 _history = System.IO.File.ReadAllLines(historyrcPath);
@@ -112,14 +111,6 @@ namespace RetroConsole.Console
 
         public void OnCtrlC() =>
             _buffer.InsertInput($"[^C]");
-
-        //public void UserInit()
-        //{
-        //    historyrcPath = $"{logPath}{rsFiles[0]}";
-        //    history = System.IO.File.ReadAllLines(historyrcPath).ToList();
-
-        //    currentHistoryCommandIndex = history.Count;
-        //}
 
         #endregion
 
