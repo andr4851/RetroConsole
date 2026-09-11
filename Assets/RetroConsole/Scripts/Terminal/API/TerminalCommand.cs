@@ -3,7 +3,7 @@ using RetroConsole.Extented;
 
 namespace RetroConsole.Console
 {
-    [AddComponentMenu("RetroSDK/Terminal/Terminal command")]
+    [AddComponentMenu("RetroConsole/Terminal/Terminal command")]
     public class TerminalCommand : MonoBehaviour, IOrder
     {
         #region Variables

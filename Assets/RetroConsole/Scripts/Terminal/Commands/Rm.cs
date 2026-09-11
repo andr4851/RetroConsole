@@ -9,7 +9,7 @@ using RetroConsole.Utility;
 
 namespace RetroConsole.Console.Commands
 {
-    [AddComponentMenu("RetroConsole/Terminal/Rm")]
+    [AddComponentMenu("RetroConsole/Terminal Commands/Rm")]
     public class Rm: TerminalCommand, IOrder
     {
         #region Variables

@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 
 namespace RetroConsole.Windows
 {
-    [AddComponentMenu("RetroSDK/Window/Window resize")]
+    [AddComponentMenu("RetroConsole/Window/Window resize")]
     public class WindowResize : MonoBehaviour, IPointerDownHandler, IDragHandler
     {
         private Vector2 minSize, maxSize;

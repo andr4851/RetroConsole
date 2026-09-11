@@ -7,7 +7,7 @@ using static RetroConsole.Utility.ConstantsLibrary;
 
 namespace RetroConsole.Console
 {
-    [AddComponentMenu("RetroConsole/Application/Terminal/Terminal")]
+    [AddComponentMenu("RetroConsole/Application/Terminal/Terminal Master")]
     public class TerminalMaster : MonoBehaviour, IOrder
     {
         #region Variables

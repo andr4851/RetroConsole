@@ -4,7 +4,7 @@ using Codice.Client.BaseCommands;
 
 namespace RetroConsole.Console.Commands
 {
-    [AddComponentMenu("RetroConsole/Terminal/Log")]
+    [AddComponentMenu("RetroConsole/Terminal Commands/Log")]
     public class Log: TerminalCommand, IOrder
     {
         #region Variables

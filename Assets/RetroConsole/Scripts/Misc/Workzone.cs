@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace RetroConsole.Desktop
 {
-    [AddComponentMenu("RetroSDK/Desktop/Workzone")]
+    [AddComponentMenu("RetroConsole/Desktop/Workzone")]
     public class Workzone : MonoBehaviour
     {
         [HideInInspector]

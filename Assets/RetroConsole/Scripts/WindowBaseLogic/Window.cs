@@ -6,7 +6,7 @@ using RetroConsole.Desktop;
 
 namespace RetroConsole.Windows
 {
-    [AddComponentMenu("RetroSDK/Window/Window")]
+    [AddComponentMenu("RetroConsole/Window/Window")]
     public class Window : MonoBehaviour
     {
         #region Variables

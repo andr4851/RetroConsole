@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace RetroConsole.Console.Commands
 {
-    [AddComponentMenu("RetroConsole/Terminal/Echo")]
+    [AddComponentMenu("RetroConsole/Terminal Commands/Echo")]
     public class Echo : TerminalCommand, IOrder
     {
         #region API

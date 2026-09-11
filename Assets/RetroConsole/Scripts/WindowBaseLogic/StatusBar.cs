@@ -4,7 +4,7 @@ using static RetroConsole.Utility.ConstantsLibrary;
 
 namespace RetroConsole.Windows
 {
-    [AddComponentMenu("RetroSDK/Window/StatusBar")]
+    [AddComponentMenu("RetroConsole/Window/StatusBar")]
     public class StatusBar : MonoBehaviour
     {
         [SerializeField]

@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 
 namespace RetroConsole.Windows
 {
-    [AddComponentMenu("RetroSDK/Window/Window move")]
+    [AddComponentMenu("RetroConsole/Window/Window move")]
     public class WindowMove : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerDownHandler
     {
         public Window parentalWindow;
