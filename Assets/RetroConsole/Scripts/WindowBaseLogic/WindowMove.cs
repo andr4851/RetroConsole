@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 namespace RetroConsole.Windows
 {
@@ -11,6 +12,7 @@ namespace RetroConsole.Windows
         public RectTransform m_RectTransform;
 
         private Vector3 mouseStartingPos;
+
         private bool m_IsDragging;
 
         private void Awake()
@@ -21,16 +23,34 @@ namespace RetroConsole.Windows
 
         public void OnBeginDrag(PointerEventData eventData)
         {
+            #if ENABLE_LEGACY_INPUT_MANAGER
             mouseStartingPos = Input.mousePosition;
+
+            #endif
+
+            #if ENABLE_INPUT_SYSTEM
+            mouseStartingPos = Mouse.current.position.value;
             m_IsDragging = true;
+
+            #endif
         }
 
         public void OnDrag(PointerEventData eventData)
         {
             if (m_IsDragging)
             {
+                #if ENABLE_LEGACY_INPUT_MANAGER
                 m_RectTransform.position -= mouseStartingPos - Input.mousePosition;
                 mouseStartingPos = Input.mousePosition;
+
+                #endif
+
+                #if ENABLE_INPUT_SYSTEM
+                m_RectTransform.position -= mouseStartingPos - new Vector3 (Mouse.current.position.value.x, Mouse.current.position.value.y);
+                mouseStartingPos = Mouse.current.position.value;
+                
+                #endif
+
             }
         }
 
