@@ -2,6 +2,7 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 using static RetroConsole.Utility.ConstantsLibrary;
 
 namespace RetroConsole.Extented
@@ -43,6 +44,8 @@ namespace RetroConsole.Extented
             if (caretPosition < Regex.Replace(text, "<.*?>", string.Empty).Length - counter)
                 OnEnd();
 
+            #if ENABLE_LEGACY_INPUT_MANAGER
+
             if (Input.GetKeyDown(KeyCode.UpArrow))
                 order.OnArrowUp();
 
@@ -57,6 +60,26 @@ namespace RetroConsole.Extented
                 order.OnCtrlC();
                 BufferReload();
             }
+
+            #endif
+
+            #if ENABLE_INPUT_SYSTEM
+            if (Keyboard.current.upArrowKey.wasPressedThisFrame)
+                order.OnArrowUp();
+
+            if (Keyboard.current.downArrowKey.wasPressedThisFrame)
+                order.OnArrowDown();
+
+            if (Keyboard.current.endKey.wasPressedThisFrame)
+                OnEnd();
+
+            if (Keyboard.current.ctrlKey.isPressed && Keyboard.current.cKey.wasPressedThisFrame)
+            {
+                order.OnCtrlC();
+                BufferReload();
+            }
+
+            #endif
         }
 
         private void OnApplicationQuit() =>
@@ -222,11 +245,23 @@ namespace RetroConsole.Extented
         {
             rect.verticalNormalizedPosition = 0;
 
+            #if ENABLE_LEGACY_INPUT_MANAGER
             if (Input.GetKey(KeyCode.Backspace))
                 return;
 
             if (Input.GetKey(KeyCode.Delete))
                 return;
+
+            #endif
+
+            #if ENABLE_INPUT_SYSTEM
+            if (Keyboard.current.backspaceKey.isPressed)
+                return;
+
+            if (Keyboard.current.deleteKey.isPressed)
+                return;
+
+            #endif
 
             counter++;
         }
@@ -307,6 +342,6 @@ namespace RetroConsole.Extented
         private void SetBlockFalse(string s) => 
             block = false;
         
-        #endregion
+#endregion
     }
 }

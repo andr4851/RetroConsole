@@ -583,7 +583,7 @@ GameObject:
   - component: {fileID: 1773129471}
   - component: {fileID: 1773129470}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: TerminalOverlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
