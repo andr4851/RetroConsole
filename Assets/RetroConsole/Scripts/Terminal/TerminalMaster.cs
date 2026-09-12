@@ -21,7 +21,7 @@ namespace RetroConsole.Console
 
         private TerminalBuffer _buffer;
 
-        private readonly string historyrcPath = $"{logPath}{rsFiles[0]}";
+        private string historyrcPath => $"{logPath}{rsFiles[0]}";
         private List<string> history = new();
 
         private int currentHistoryCommandIndex;

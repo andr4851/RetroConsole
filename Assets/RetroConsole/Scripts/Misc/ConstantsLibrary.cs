@@ -4,8 +4,8 @@ namespace RetroConsole.Utility
     {
         #region String and char constants
         public static readonly string EmptyField = string.Empty;
-        public static readonly string ConsolePath = $"{UnityEngine.Application.dataPath}\\RConsole";
-        public static readonly string logPath = $"{UnityEngine.Application.dataPath}\\RConsole\\log";
+        public static string ConsolePath => $"{UnityEngine.Application.persistentDataPath}\\RConsole";
+        public static string logPath =>  $"{UnityEngine.Application.persistentDataPath}\\RConsole\\log";
         public static readonly string[] ConsoleDirs = {"\\log", "\\conf" };
         public static readonly string[] FileRes = { ".bin", ".dll", ".txt", ".sys", ".log", ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".bat", ".sh", ".cfg", ".rdk", ".sdk" };
         public static readonly string[] rsFiles = { "\\historyrc.rdk", "\\shellrc.rdk", "\\bufferrc.rdk" };

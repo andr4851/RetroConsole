@@ -19,7 +19,7 @@ namespace RetroConsole.Extented
         private int counter = 0;
         private bool makeNewLine = true, block = false;
         private string fullBuffer;
-        private readonly string currentHistoryPath = $"{logPath}{rsFiles[2]}";
+        private string currentHistoryPath => $"{logPath}{rsFiles[2]}";
 
         private ScrollRect rect;
 
