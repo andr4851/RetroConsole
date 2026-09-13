@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using static RetroConsole.Utility.ConstantsLibrary;
+using UnityEngine.EventSystems;
 
 namespace RetroConsole.Extented
 {
@@ -202,6 +203,28 @@ namespace RetroConsole.Extented
             }
 
             rect.verticalNormalizedPosition = 0;
+        }
+
+        public void OverlayMessege(int commandCode = 0)
+        {
+            switch (commandCode)
+            {
+                case 0:
+                    return;
+                case 1:
+                    Select();
+                    OnEnd();
+                    ActivateInputField();
+                    break;
+                case 2:
+                    Backspace();
+                    EventSystem.current.SetSelectedGameObject(null);
+                    DeactivateInputField();
+                    SendOnFocusLost();
+                    break;
+                default:
+                    throw new System.IndexOutOfRangeException();
+            }
         }
 
         #endregion
