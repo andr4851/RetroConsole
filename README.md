@@ -2,18 +2,18 @@
 
 A runtime debug console for Unity with a Unix-like command syntax.
 
-RetroConsole gives you an in-game terminal window for inspecting and manipulating your project while it runs. It ships with a set of built-in commands, basic file and directory utilities, and a small API for writing your own commands.
-
-> **Pre-release (0.5.1).** The package is usable and stable enough for day-to-day debugging, but some parts are still being polished. Expect changes to the API before 1.0.
+RetroConsole gives you an in-game terminal window for inspecting and manipulating your project while it runs. It ships with a set of built-in commands, a live log viewer, basic file and directory utilities, and a small API for writing your own commands.
 
 ---
 
 ## Features
 
 - Draggable, resizable terminal window with a full input/output buffer
+- Live Unity log viewer with filtering by message type
+- Overlay mode — toggle the console over your game with the `` ` `` key
 - Built-in file and directory utilities — read, create, delete
 - Command history persisted between sessions
-- Familiar Unix-like feel: prompt format, flags, output stream
+- Familiar Unix-like feel: prompt format, flags, `Ctrl+C` to interrupt
 - A small, explicit API for adding your own commands
 - Command registration through a ScriptableObject — no changes to the console core
 
@@ -23,6 +23,7 @@ RetroConsole gives you an in-game terminal window for inspecting and manipulatin
 
 - Unity 6 (developed and tested on `6000.0.58f2`)
 - TextMeshPro
+- Works with both the legacy Input Manager and the new Input System
 
 ---
 
@@ -39,6 +40,9 @@ RetroConsole gives you an in-game terminal window for inspecting and manipulatin
 1. Open `Assets/RetroConsole/Scenes/Demo.unity` to see a working setup
 2. To add the console to your own scene, drop the `Terminal` prefab (`Assets/RetroConsole/Prefabs/Windows/`) into a Canvas
 3. The window requires a **Workzone** object to support its full functionality — window dragging, resizing and status bar. See how it is wired up in the demo scene
+4. For a console that stays available across scenes, use the `TerminalOverlay` prefab instead — it survives scene loads and toggles with the `` ` `` key
+
+Console files are stored under `Application.persistentDataPath/RConsole`.
 
 ---
 
@@ -59,11 +63,33 @@ Shipped as external commands (prefabs, registered through `ExternalCommands`):
 
 | Command | Description |
 |---|---|
+| `log` | Streams Unity console output into the terminal |
 | `echo` | Writes input text to standard output |
 | `cat` | Writes the contents of a file or input stream to standard output |
 | `mk` | Creates a file |
 | `rm` | Removes a file or directory |
 | `test` | Demo command — does nothing, used for testing and demonstration |
+
+### `log`
+
+Attaches to Unity's log stream and prints messages into the buffer as they arrive, colour-coded by type. Called without arguments, it shows everything. Pass flags to filter:
+
+| Flag | Shows |
+|---|---|
+| `-l` | Logs |
+| `-w` | Warnings |
+| `-e` | Errors |
+| `-a` | Assertions |
+| `-x` | Exceptions |
+| `-s` | Include stack traces |
+
+```
+log -e -x -s      # errors and exceptions, with stack traces
+log -w            # warnings only
+log               # everything
+```
+
+Only one logger can run at a time. Press `Ctrl+C` to stop it and return to the prompt.
 
 ---
 
@@ -93,7 +119,7 @@ using RetroConsole.Extented;
 
 namespace MyGame.Commands
 {
-    [AddComponentMenu("RetroConsole/Terminal/Hello")]
+    [AddComponentMenu("RetroConsole/Terminal Commands/Hello")]
     public class Hello : TerminalCommand, IOrder
     {
         public override void Init()
@@ -129,8 +155,9 @@ namespace MyGame.Commands
 | `OnInputEnter(string input)` | After the user submits input requested by the command |
 | `OnExit()` | When the command finishes. Must hand control back to the terminal master |
 | `OnArrowUp()` / `OnArrowDown()` | On up / down arrow key press |
+| `OnCtrlC()` | On `Ctrl+C` — override it for long-running commands so the user can interrupt them |
 
-You rarely need to override all of them. For most commands `Init()` and `OnExit()` are enough, and `OnInputEnter` can be skipped entirely — use it only when your command needs to prompt the user for something.
+You rarely need to override all of them. For most commands `Init()` and `OnExit()` are enough, and `OnInputEnter` can be skipped entirely — use it only when your command needs to prompt the user for something. Override `OnCtrlC()` when your command keeps running after `Init()`, as `log` does.
 
 ### Available members
 
@@ -138,9 +165,21 @@ You rarely need to override all of them. For most commands `Init()` and `OnExit(
 |---|---|
 | `input` | The raw command line as entered |
 | `separatedinput` | The command line split into tokens — use this to read flags and arguments |
-| `buffer` | The terminal buffer. `PrintLine()`, `InsertInput()`, `SetFormat()`, `SetOrder()` |
+| `buffer` | The terminal buffer — see below |
 | `master` | The terminal master. Pass it to `buffer.SetOrder()` in `OnExit()` to return control |
 | `format` | The prompt string shown while the command is active |
+
+### Buffer methods
+
+| Method | Purpose |
+|---|---|
+| `PrintLine(string)` | Writes a line to the output. Supports TMP rich text, including `<color=…>` |
+| `Print(string)` | Writes without a line break |
+| `InsertInput(string)` | Puts text into the input field |
+| `ClearBuffer()` | Clears the output |
+| `SetFormat(string)` | Changes the prompt |
+| `SetOrder(IOrder)` | Hands control to another command, or back to the master |
+| `SetReadOnly(bool)` | Locks or unlocks input |
 
 ### Handling flags
 
@@ -150,7 +189,7 @@ You rarely need to override all of them. For most commands `Init()` and `OnExit(
 rm -r -f myfolder
 ```
 
-arrives as `["rm", "-r", "-f", "myfolder"]` — parse it however your command needs.
+arrives as `["rm", "-r", "-f", "myfolder"]` — parse it however your command needs. See `Log.cs` for a worked example of flag parsing.
 
 ---
 
@@ -160,21 +199,28 @@ arrives as `["rm", "-r", "-f", "myfolder"]` — parse it however your command ne
 Assets/RetroConsole/
 ├── Prefabs/
 │   ├── TermialCommands/     # command prefabs
-│   └── Windows/             # Terminal window and base window prefabs
+│   ├── Windows/             # Terminal window and base window prefabs
+│   └── TerminalOverlay.prefab
 ├── Presets/
 │   └── ExternalCommands.asset
 ├── Resources/               # fonts, sprites, audio
 ├── Scenes/
 │   └── Demo.unity           # working example
 ├── Scripts/
-│   ├── Misc/                # constants, tokenizer, filesystem helpers, workzone
+│   ├── Misc/                # constants, tokenizer, filesystem helpers, workzone, overlay
 │   ├── Terminal/
 │   │   ├── API/             # IOrder, TerminalCommand, ExternalCommands
-│   │   └── Commands/        # built-in external commands
+│   │   └── Commands/        # shipped external commands
 │   └── WindowBaseLogic/     # window move, resize, status bar
 └── ThirdParty/
     └── TextMeshPro/         # modified TMP_InputField
 ```
+
+---
+
+## Known limitations
+
+- Path separators are hardcoded for Windows. Other platforms are untested.
 
 ---
 
@@ -185,13 +231,6 @@ Assets/RetroConsole/
 The fork exists because the console needs access to the input field's internal editing methods (`Backspace`, `Delete` and similar), which have no public or protected accessor. Working around this from the outside proved fragile, so the class was forked with minimal changes — access modifiers only, no logic changes.
 
 This file is distributed under the Unity Companion License. See `Assets/RetroConsole/ThirdParty/LICENSE.md`. The rest of the package is MIT.
-
-## Known limitations
-
-- Console files (`historyrc`, `shellrc`, `bufferrc`) are written to
-  `Application.dataPath`. On builds installed to a protected location
-  this will fail — moving to `Application.persistentDataPath` is planned.
-- Path separators are currently hardcoded for Windows.
 
 ---
 
