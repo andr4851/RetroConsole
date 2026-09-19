@@ -21,7 +21,7 @@ RetroConsole gives you an in-game terminal window for inspecting and manipulatin
 
 ## Requirements
 
-- Unity 6 (developed and tested on `6000.0.58f2`)
+- Unity 6 (developed and tested on `6000.3.8f1`)
 - TextMeshPro
 - Works with both the legacy Input Manager and the new Input System
 
