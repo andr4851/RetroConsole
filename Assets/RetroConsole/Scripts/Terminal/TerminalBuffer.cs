@@ -45,7 +45,7 @@ namespace RetroConsole.Extented
             if (caretPosition < Regex.Replace(text, "<.*?>", string.Empty).Length - counter)
                 OnEnd();
 
-            #if ENABLE_LEGACY_INPUT_MANAGER
+            #if ENABLE_LEGACY_INPUT_MANAGER && !ENABLE_INPUT_SYSTEM
 
             if (Input.GetKeyDown(KeyCode.UpArrow))
                 order.OnArrowUp();
@@ -268,7 +268,7 @@ namespace RetroConsole.Extented
         {
             rect.verticalNormalizedPosition = 0;
 
-            #if ENABLE_LEGACY_INPUT_MANAGER
+            #if ENABLE_LEGACY_INPUT_MANAGER && !ENABLE_INPUT_SYSTEM
             if (Input.GetKey(KeyCode.Backspace))
                 return;
 
